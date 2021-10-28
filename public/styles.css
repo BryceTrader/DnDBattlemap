@@ -1,0 +1,24 @@
+body {
+	margin: 0;
+	padding: 0;
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+}
+
+canvas {
+	image-rendering: -moz-crisp-edges;
+	image-rendering: -webkit-crisp-edges;
+	image-rendering: crisp-edges;
+	image-rendering: pixelated;
+}
+
+.back {
+	z-index: 0;
+	position: absolute;
+}
+
+.fore {
+	z-index: 1;
+	position: absolute;
+}
