@@ -1,41 +1,30 @@
-const canvas = document.getElementById("foreground");
-const ctx = canvas.getContext("2d");
-ctx.imageSmoothingEnabled = false;
+const socket = io()
+const canvas = document.getElementById('foreground')
+const ctx = canvas.getContext('2d')
+ctx.imageSmoothingEnabled = false
 
-const backCanvas = document.getElementById("background");
-const bctx = backCanvas.getContext("2d");
-bctx.imageSmoothingEnabled = false;
+const backCanvas = document.getElementById('background')
+const bctx = backCanvas.getContext('2d')
+bctx.imageSmoothingEnabled = false
 
-canvas.width = document.body.clientWidth;
-canvas.height = document.body.clientHeight;
-backCanvas.width = document.body.clientWidth;
-backCanvas.height = document.body.clientHeight;
+canvas.width = document.body.clientWidth
+canvas.height = document.body.clientHeight
+backCanvas.width = document.body.clientWidth
+backCanvas.height = document.body.clientHeight
 
-// System setup
-const AnimatorSystem = new AnimationSystem();
-const RenderSystem = new RenderSystem(ctx, canvas);
-const RenderSystemBackground = new RenderSystem(bctx, backCanvas);
-
+const AnimationSys = new AnimationSystem()
+const RenderSys = new RenderSystem(ctx, canvas)
+socket.on('connected', (data) => {
+	AnimationSys.animationJSON = data.animatedSpriteJSON
+})
 // Manager
-const Manager = new Manager();
-Manager.addSystem(AnimatorSystem);
-Manager.addSystem(RenderSystem);
-Manager.addSystem(RenderSystemBackground);
+const GM = new Manager()
+GM.addSystem(AnimationSys)
+GM.addSystem(RenderSys)
 
-let baseScale = 128;
-const gridSize = baseScale + (baseScale % 2) * 2;
-// let CANDRAW = false
-// let test = new Image()
-// test.src = 'sprites/orc.png'
-// test.onload = () => loadImage()
-// let frame = 0
-// let offset = 0
-// window.onload = () => update()
-
-let PLAYER = new Entity();
-PLAYER.AddComponent(new Position(0, 0));
-PLAYER.Print();
-grid(gridSize);
+let baseScale = 128
+const gridSize = baseScale + (baseScale % 2) * 2
+grid(gridSize)
 
 // window.addEventListener('resize', () => {
 // 	canvas.width = window.innerWidth
@@ -45,52 +34,27 @@ grid(gridSize);
 // 	grid(gridSize)
 // })
 
-window.addEventListener("mousedown", (e) => {
-  if (!CANDRAW) return;
-  const cX = e.clientX;
-  const cY = e.clientY;
-  animate(cX, cY, test, 0, 0);
-});
-
-function update() {
-  if (!CANDRAW) return;
-  frame++;
-  animate(0, 0, test, offset, 0);
-
-  if (frame - 10 == 0) {
-    offset += 32;
-    frame = 0;
-  }
-  if (offset > 0) offset = 0;
-  requestAnimationFrame(update);
-}
+window.addEventListener('mousedown', (e) => {
+	const cX = Math.floor(e.clientX / gridSize) * gridSize
+	const cY = Math.floor(e.clientY / gridSize) * gridSize
+	target = new Entity()
+	target.addComponent(new Position(cX, cY))
+	target.addComponent(new Sprite('orc'))
+	target.addComponent(new Animator(target.components.Sprite.spriteName))
+	target.print()
+	GM.addEntity(target)
+})
 
 function grid(x) {
-  const w = document.body.clientWidth;
-  const h = document.body.clientHeight;
+	const w = document.body.clientWidth
+	const h = document.body.clientHeight
 
-  for (let i = 0; i <= w; i += x) {
-    bctx.moveTo(i, 0);
-    bctx.lineTo(i, h);
-    bctx.stroke();
-    bctx.moveTo(0, i);
-    bctx.lineTo(w, i);
-    bctx.stroke();
-  }
-}
-
-function loadImage() {
-  CANDRAW = true;
-}
-
-function drawSprite(image, sX, sY, sW, sH, dX, dY, dW, dH) {
-  ctx.imageSmoothingEnabled = false;
-  ctx.drawImage(image, sX, sY, sW, sH, dX, dY, dW, dH);
-}
-
-function animate(cX, cY, test, a1, a2) {
-  const x = Math.floor(cX / gridSize) * gridSize + 1;
-  const y = Math.floor(cY / gridSize) * gridSize + 1;
-  ctx.clearRect(x, y, gridSize, gridSize);
-  drawSprite(test, a1, a2, 32, 32, x, y, gridSize - 2, gridSize - 2);
+	for (let i = 0; i <= w; i += x) {
+		bctx.moveTo(i, 0)
+		bctx.lineTo(i, h)
+		bctx.stroke()
+		bctx.moveTo(0, i)
+		bctx.lineTo(w, i)
+		bctx.stroke()
+	}
 }
