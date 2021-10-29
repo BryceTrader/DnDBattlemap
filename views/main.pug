@@ -2,7 +2,10 @@ extends structure/__layout.pug
 block head  
     title test
     script(src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js" defer)
+    script(src="../Entity.js")
+    script(src="../System.js")  
     script(src="../scripts/Components.js" defer) 
+    script(src="../scripts/Systems/BaseSystem.js")
     script(src="../main.js" defer)
     
 block content
