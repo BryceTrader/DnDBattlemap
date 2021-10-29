@@ -8,7 +8,7 @@ class Entity {
     if (component instanceof BaseComponent) {
       this.components[component.name] = component;
     } else {
-      console.error("Argument isn't an instance of BaseComponent.");
+      console.error(`${component.constructor.name} isn't an instance of BaseComponent.`);
     }
   }
 
