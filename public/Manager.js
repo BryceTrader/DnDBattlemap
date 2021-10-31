@@ -2,6 +2,12 @@ class Manager {
 	constructor() {
 		this.entities = []
 		this.systems = []
+		this.tileSize
+		this.zoomScale
+		this.zoomLevel
+		this.tileScaled
+		this.xOffset = 0
+		this.yOffset = 0
 	}
 
 	addEntity(entity) {
@@ -14,7 +20,7 @@ class Manager {
 
 	removeEntity(entityToBeRemoved) {
 		let removed = false
-		for (let i = 0; i < this.entites.length; i++) {
+		for (let i = 0; i < this.entities.length; i++) {
 			if (this.entities[i].id === entityToBeRemoved.id) {
 				this.entities.splice(i, 1)
 				removed = true
@@ -44,6 +50,17 @@ class Manager {
 				break
 			}
 		}
+	}
+
+	checkSamePosition(targetEntity) {
+		for (let i = 0; i < this.entities.length; i++) {
+			const entity = this.entities[i].components['Position']
+			if (entity.x != targetEntity.components['Position'].x) continue
+			if (entity.y == targetEntity.components['Position'].y) {
+				return false
+			}
+		}
+		return true
 	}
 
 	update() {

@@ -5,7 +5,7 @@ class BaseComponent {
 }
 
 class Position extends BaseComponent {
-	constructor(x = 0, y = 0) {
+	constructor(x, y) {
 		super('Position')
 		this.x = x
 		this.y = y
@@ -17,10 +17,6 @@ class Sprite extends BaseComponent {
 		super('Sprite')
 		this.spriteName = name
 		this.spriteImage = new Image()
-		this.#setSource()
-	}
-
-	#setSource() {
 		this.spriteImage.src = `../sprites/${this.spriteName}.png`
 	}
 }
@@ -29,11 +25,10 @@ class Animator extends BaseComponent {
 	constructor(name) {
 		super('Animator')
 		this.animatorName = name
-		this.json = `../json/${this.spriteName}.json`
-		this.sizeX
-		this.sizeY
-		this.#getSize()
+		this.spriteSheetX = 0
+		this.spriteSheetY = 0
+		this.spriteSize = 0
+		this.frames = 0
+		this.currentFrame = 1
 	}
-
-	#getSize() {}
 }

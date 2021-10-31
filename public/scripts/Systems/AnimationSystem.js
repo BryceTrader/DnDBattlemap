@@ -2,15 +2,25 @@ class AnimationSystem extends BaseSystem {
 	constructor() {
 		super('AnimationSystem')
 		this.animationJSON = {}
+		this.currentFrame = 0
+	}
+
+	getFrameData(animator) {
+		animator.spriteSize = this.animationJSON.meta.size.h
+		animator.frames = this.animationJSON.meta.size.w / this.animationJSON.meta.size.h
+	}
+
+	update(entities) {
+		this.currentFrame++
+		if (this.currentFrame % 30 == 0) {
+			for (let i = 0; i < entities.length; i++) {
+				const entity = entities[i].components['Animator']
+				if (!entity.frames) this.getFrameData(entity)
+				entity.currentFrame++
+				if (entity.currentFrame > entity.frames) entity.currentFrame = 1
+				entity.spriteSheetX = entity.spriteSize * (entity.currentFrame - 1)
+				this.currentFrame = 0
+			}
+		}
 	}
 }
-// drawSprite(sX: number, sY: number, sW: number, sH: number, dW: number, dH: number): void {
-// 	// ctx.imageSmoothingEnabled = false
-// 	// ctx.drawImage(this.image, sX, sY, sW, sH, this.posX, this.posY, dW, dH)
-// }
-
-// update(cX: number, cY: number, a1: number, a2: number) {
-// 	// const x = Math.floor(cX / gridSize) * gridSize + 1
-// 	// const y = Math.floor(cY / gridSize) * gridSize + 1
-// 	// ctx.clearRect(x, y, gridSize, gridSize)
-// 	// drawSprite(a1, a2, 32, 32, x, y, gridSize - 2, gridSize - 2)
