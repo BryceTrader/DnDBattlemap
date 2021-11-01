@@ -14,11 +14,22 @@ app.use(express.static('public'))
 
 app.use('/', indexRouter)
 
+let EntityList = []
+
 // Socket.io
 io.on('connection', (socket) => {
 	console.log(`Connected: ${socket.id}`)
 	socket.emit('connected', {
-		animatedSpriteJSON: JSON.parse(fs.readFileSync('public/json/Orc.json')),
+		animatedSpriteJSON: JSON.parse(fs.readFileSync('json/Orc.json')),
+		entityList: EntityList,
+	})
+
+	socket.on('playerUpdates', (data) => {
+		EntityList = data.entityList
+	})
+
+	socket.emit('serverUpdates', {
+		entityList: EntityList,
 	})
 
 	socket.on('disconnect', () => {

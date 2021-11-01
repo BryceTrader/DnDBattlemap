@@ -12,10 +12,9 @@ class AnimationSystem extends BaseSystem {
 
 	update(entities) {
 		this.currentFrame++
-		if (this.currentFrame % 30 == 0) {
+		if (this.currentFrame % 15 == 0) {
 			for (let i = 0; i < entities.length; i++) {
 				const entity = entities[i].components['Animator']
-				if (!entity.frames) this.getFrameData(entity)
 				entity.currentFrame++
 				if (entity.currentFrame > entity.frames) entity.currentFrame = 1
 				entity.spriteSheetX = entity.spriteSize * (entity.currentFrame - 1)

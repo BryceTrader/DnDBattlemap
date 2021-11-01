@@ -21,26 +21,28 @@ class InputSystem extends BaseSystem {
 	}
 
 	inputHandler(key) {
+		const camera = GM.systems[GM.systemsDictionary['CameraSystem']]
+
 		switch (key) {
 			case this.controls.zoomOut:
-				GM.zoomLevel--
-				GM.tileScaled = GM.tileSize + GM.zoomScale * GM.zoomLevel
+				camera.zoomLevel--
+				camera.tileScaled = camera.tileSize + camera.zoomScale * camera.zoomLevel
 				break
 			case this.controls.zoomIn:
-				GM.zoomLevel++
-				GM.tileScaled = GM.tileSize + GM.zoomScale * GM.zoomLevel
+				camera.zoomLevel++
+				camera.tileScaled = camera.tileSize + camera.zoomScale * camera.zoomLevel
 				break
 			case this.controls.cameraDown:
-				GM.yOffset++
+				camera.yOffset--
 				break
 			case this.controls.cameraUp:
-				GM.yOffset--
+				camera.yOffset++
 				break
 			case this.controls.cameraLeft:
-				GM.xOffset--
+				camera.xOffset++
 				break
 			case this.controls.cameraRight:
-				GM.xOffset++
+				camera.xOffset--
 				break
 		}
 	}

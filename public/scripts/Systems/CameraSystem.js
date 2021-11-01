@@ -1,13 +1,17 @@
 class CameraSystem extends BaseSystem {
-	constructor() {
+	constructor(baseSize = 32) {
 		super('CameraSystem')
 		this.xOffset = 0
 		this.yOffset = 0
+		this.zoomScale = 32
+		this.zoomLevel = 0
+		this.tileSize = baseSize
+		this.tileScaled = this.tileSize + this.zoomScale * this.zoomLevel
 	}
 	update() {
-		if (GM.tileScaled < GM.zoomScale) {
-			GM.tileScaled = GM.zoomScale
-			GM.zoomLevel++
+		if (this.tileScaled < this.zoomScale) {
+			this.tileScaled = this.zoomScale
+			this.zoomLevel++
 		}
 	}
 }
