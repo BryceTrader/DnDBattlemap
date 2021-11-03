@@ -5,10 +5,10 @@ class InputSystem extends BaseSystem {
 		this.controls = {
 			zoomIn: 'BracketRight',
 			zoomOut: 'BracketLeft',
-			cameraLeft: 'ArrowLeft',
-			cameraRight: 'ArrowRight',
-			cameraUp: 'ArrowUp',
-			cameraDown: 'ArrowDown',
+			cameraLeft: 'KeyA',
+			cameraRight: 'KeyD',
+			cameraUp: 'KeyW',
+			cameraDown: 'KeyS',
 		}
 	}
 

@@ -5,6 +5,12 @@ class RenderSystem extends BaseSystem {
 		this.canvas = canvas
 	}
 
+	onScreen(curX, curY, width, height) {
+		if (curX < 0 || curX > width) return false
+		if (curY < 0 || curY > height) return false
+		return true
+	}
+
 	update(entities) {
 		this.context.imageSmoothingEnabled = false
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
@@ -12,13 +18,20 @@ class RenderSystem extends BaseSystem {
 
 		for (let i = 0; i < entities.length; i++) {
 			const entity = entities[i]
+
+			// Onscreen check
+			const currentPosX = entity.components['Position'].x + camera.xOffset
+			const currentPosY = entity.components['Position'].y + camera.yOffset
+			if (!this.onScreen(currentPosX, currentPosY, camera.width, camera.height)) continue
+
+			// Getting drawing information
 			const image = entity.components['Sprite'].spriteImage
 			const sx = entity.components['Animator'].spriteSheetX
 			const sy = entity.components['Animator'].spriteSheetY
 			const sWidth = entity.components['Animator'].spriteSize
 			const sHeight = sWidth
-			const dx = (entity.components['Position'].x + camera.xOffset) * camera.tileScaled
-			const dy = (entity.components['Position'].y + camera.yOffset) * camera.tileScaled
+			const dx = currentPosX * camera.tileScaled
+			const dy = currentPosY * camera.tileScaled
 			const dWidth = camera.tileScaled * (sWidth / camera.zoomScale)
 			const dHeight = dWidth
 

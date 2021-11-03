@@ -15,6 +15,7 @@ const InputSys = new InputSystem()
 const CameraSys = new CameraSystem()
 const AnimationSys = new AnimationSystem()
 const RenderSys = new RenderSystem(ctx, canvas)
+const BackgroundSys = new BackgroundSystem(bctx, backCanvas)
 // const NetworkSys = new NetworkSystem()
 
 // Socket.io
@@ -28,14 +29,17 @@ GM.addSystem(InputSys)
 GM.addSystem(CameraSys)
 GM.addSystem(AnimationSys)
 GM.addSystem(RenderSys)
+GM.addSystem(BackgroundSys)
 // GM.addSystem(NetworkSys)
 
 window.addEventListener('resize', () => {
-	canvas.width = window.innerWidth
-	canvas.height = window.innerHeight
-	backCanvas.width = window.innerWidth
-	backCanvas.height = window.innerHeight
-	grid(GM.systems[GM.systemsDictionary['CameraSystem']].tileScaled)
+	const camera = GM.systems[GM.systemsDictionary['CameraSystem']]
+	camera.getWindowSize()
+	canvas.width = (camera.width + 1) * camera.tileScaled // render is base 0 grid is not... idk
+	canvas.height = (camera.height + 1) * camera.tileScaled // w and h are floored
+	backCanvas.width = canvas.width
+	backCanvas.height = canvas.height
+	grid(camera.tileScaled)
 })
 
 window.addEventListener('mousedown', (e) => {
