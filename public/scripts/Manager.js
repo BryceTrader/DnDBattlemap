@@ -14,19 +14,11 @@ class Manager {
 	}
 
 	removeEntity(entityToBeRemoved) {
-		let removed = false
 		for (let i = 0; i < this.entities.length; i++) {
 			if (this.entities[i].id === entityToBeRemoved.id) {
 				this.entities.splice(i, 1)
-				removed = true
 				break
 			}
-		}
-		// for Debug
-		if (removed) {
-			console.log(`Entity ${entityToBeRemoved.id} has been removed.`)
-		} else {
-			console.log(`No entity with the ID of ${entityToBeRemoved.id} is in the system currently.`)
 		}
 	}
 
@@ -52,12 +44,19 @@ class Manager {
 	checkSamePosition(targetX, targetY) {
 		for (let i = 0; i < this.entities.length; i++) {
 			const entity = this.entities[i].components.Position
+			if (!entity) continue
 			if (entity.x != targetX) continue
 			if (entity.y == targetY) {
 				return false
 			}
 		}
 		return true
+	}
+
+	getCamera() {
+		for (let i = 0; i < this.entities.length; i++) {
+			if (this.entities[i].components.Camera) return this.entities[i].components.Camera
+		}
 	}
 
 	update() {

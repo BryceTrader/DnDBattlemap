@@ -3,25 +3,32 @@ class InputSystem extends BaseSystem {
 		super('InputSystem')
 		this.keyInput = []
 		this.controls = {
-			zoomIn: 'BracketRight',
-			zoomOut: 'BracketLeft',
-			cameraLeft: 'KeyA',
-			cameraRight: 'KeyD',
-			cameraUp: 'KeyW',
-			cameraDown: 'KeyS',
+			zoomIn: ']',
+			zoomOut: '[',
+			cameraLeft: 'a',
+			cameraRight: 'd',
+			cameraUp: 'w',
+			cameraDown: 's',
 		}
 	}
 
-	update() {
-		for (let i = 0; i < this.keyInput.length; i++) {
-			const value = this.keyInput[i]
-			this.inputHandler(value)
+	mouseClickHandler(click) {
+		const AS = GM.systems[GM.systemsDictionary.ActionSystem]
+		switch (click.button) {
+			case 0:
+				AS.addEntityToManager(click)
+				break
+			case 1:
+				console.log('Middle mouse button clicked.')
+				break
+			case 2:
+				AS.removeEntityFromManager(click)
+				break
 		}
-		this.keyInput = []
 	}
 
 	inputHandler(key) {
-		const camera = GM.systems[GM.systemsDictionary.CameraSystem]
+		const camera = GM.getCamera()
 
 		switch (key) {
 			case this.controls.zoomOut:
@@ -45,5 +52,14 @@ class InputSystem extends BaseSystem {
 				camera.xOffset--
 				break
 		}
+		GM.systems[GM.systemsDictionary.BackgroundSystem].backgroundMoved = true
+	}
+
+	update() {
+		for (let i = 0; i < this.keyInput.length; i++) {
+			const value = this.keyInput[i]
+			this.inputHandler(value)
+		}
+		this.keyInput = []
 	}
 }
