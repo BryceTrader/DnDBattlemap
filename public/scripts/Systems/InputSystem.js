@@ -21,7 +21,7 @@ class InputSystem extends BaseSystem {
 	}
 
 	inputHandler(key) {
-		const camera = GM.systems[GM.systemsDictionary['CameraSystem']]
+		const camera = GM.systems[GM.systemsDictionary.CameraSystem]
 
 		switch (key) {
 			case this.controls.zoomOut:

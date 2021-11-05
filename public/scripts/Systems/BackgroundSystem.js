@@ -27,28 +27,29 @@ class BackgroundSystem extends BaseSystem {
 	this.backgroundMoved = false
   }
 
-  drawGrid(camera) {
-    const width = camera.clientWidth;
-    const height = camera.clientHeight;
-	const offset = camera.tileScaled
-    for (let i = 0; i <= width; i += offset) {
-      ctx.beginPath();
-      ctx.moveTo(i, 0);
-      ctx.lineTo(i, height);
-      ctx.stroke();
-      ctx.moveTo(0, i);
-      ctx.lineTo(width, i);
-      ctx.stroke();
-      ctx.closePath();
-    }
-  }
+	drawGrid(camera) {
+		const width = camera.clientWidth;
+		const height = camera.clientHeight;
+		const offset = camera.tileScaled
+		for (let i = 0; i <= width; i += offset) {
+			this.context.beginPath();
+			this.context.moveTo(i, 0);
+			this.context.lineTo(i, height);
+			this.context.stroke();
+			this.context.moveTo(0, i);
+			this.context.lineTo(width, i);
+			this.context.stroke();
+			this.context.closePath();
+		}
+	}
 
-  update(entities) {
-	  if(!this.backgroundMoved) return
-    for (let i = 0; i < entities.length; i++) {
-      const entity = entities[i];
-	  const camera = entity.component["Camera"];
-	  if(!camera) continue
-    }
-  }
+	update(entities) {
+		if(!this.backgroundMoved) return
+		for (let i = 0; i < entities.length; i++) {
+			const entity = entities[i];
+			const camera = entity.components.Camera;
+			if(!camera) continue
+			this.drawBackground(camera)
+		}
+	}
 }

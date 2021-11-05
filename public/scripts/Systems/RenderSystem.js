@@ -18,20 +18,20 @@ class RenderSystem extends BaseSystem {
 
     for (let i = 0; i < entities.length; i++) {
       const entity = entities[i];
-      if (entity.components["Camera"]) camera = entity.components["Camera"];
-      if (!entity.components["Sprite"]) continue;
+      if (entity.components.Camera) camera = entity.components.Camera;
+      if (!entity.components.Sprite) continue;
 
       // Onscreen check
-      const currentPosX = entity.components["Position"].x + camera.xOffset;
-      const currentPosY = entity.components["Position"].y + camera.yOffset;
+      const currentPosX = entity.components.Position.x + camera.xOffset;
+      const currentPosY = entity.components.Position.y + camera.yOffset;
       if (!this.onScreen(currentPosX, currentPosY, camera.width, camera.height))
         continue;
 
       // Getting drawing information
-      const image = entity.components["Sprite"].spriteImage;
-      const sx = entity.components["Animator"].spriteSheetX;
-      const sy = entity.components["Animator"].spriteSheetY;
-      const sWidth = entity.components["Animator"].spriteSize;
+      const image = entity.components.Sprite.spriteImage;
+      const sx = entity.components.Animator.spriteSheetX;
+      const sy = entity.components.Animator.spriteSheetY;
+      const sWidth = entity.components.Animator.spriteSize;
       const sHeight = sWidth;
       const dx = currentPosX * camera.tileScaled;
       const dy = currentPosY * camera.tileScaled;

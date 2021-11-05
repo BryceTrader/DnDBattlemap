@@ -28,7 +28,7 @@ class CameraSystem extends BaseSystem {
 
 	update(entities) {
 		for (let i = 0; i < entities.length; i++) {
-			const camera = entities[i].component["Camera"];
+			const camera = entities[i].component.Camera;
 			if (!camera) continue;
 			this.checkScaling(camera)
 			if(this.resized) this.getWindowSize(camera)

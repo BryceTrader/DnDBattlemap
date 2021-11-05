@@ -49,11 +49,11 @@ class Manager {
 		}
 	}
 
-	checkSamePosition(targetEntity) {
+	checkSamePosition(targetX, targetY) {
 		for (let i = 0; i < this.entities.length; i++) {
-			const entity = this.entities[i].components['Position']
-			if (entity.x != targetEntity.components['Position'].x) continue
-			if (entity.y == targetEntity.components['Position'].y) {
+			const entity = this.entities[i].components.Position
+			if (entity.x != targetX) continue
+			if (entity.y == targetY) {
 				return false
 			}
 		}

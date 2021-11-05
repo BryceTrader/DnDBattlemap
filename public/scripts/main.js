@@ -1,5 +1,5 @@
 window.addEventListener("resize", () => {
-  onWindowResize()
+  onWindowResize();
 });
 
 window.addEventListener("mousedown", (e) => {
@@ -7,27 +7,28 @@ window.addEventListener("mousedown", (e) => {
 });
 
 window.addEventListener("keydown", (key) => {
-  GM.systems[GM.systemsDictionary["InputSystem"]].keyInput.push(key.code);
+  GM.systems[GM.systemsDictionary.InputSystem].keyInput.push(key.code);
 });
 
 function onWindowResize() {
-	const camera = GM.systems[GM.systemsDictionary["CameraSystem"]];
-	camera.resized = true
+  const camera = GM.systems[GM.systemsDictionary["CameraSystem"]];
+  camera.resized = true;
 }
 
 function addEntityToManger(e) {
-  const camera = GM.systems[GM.systemsDictionary["CameraSystem"]];
+  const camera = GM.systems[GM.systemsDictionary.CameraSystem];
   const cX = Math.floor(e.clientX / camera.tileScaled) - camera.xOffset;
   const cY = Math.floor(e.clientY / camera.tileScaled) - camera.yOffset;
 
-  target = new Entity();
+  if (!GM.checkSamePosition(cX, cY)) return
+	target = new Entity();
   target.addComponent(new Position(cX, cY));
   target.addComponent(new Sprite("orc"));
   target.addComponent(new Animator(target.components.Sprite.spriteName));
-  if (GM.checkSamePosition(target)) GM.addEntity(target);
+  GM.addEntity(target);
 
-  GM.systems[GM.systemsDictionary["AnimationSystem"]].getFrameData(
-	target.components["Animator"]
+  GM.systems[GM.systemsDictionary.AnimationSystem].getFrameData(
+    target.components.Animator
   );
 }
 
@@ -37,6 +38,7 @@ function updateLoop() {
 }
 
 function setupCanvasSystemsManager() {
+  // Canvases
   canvas.width = document.body.clientWidth;
   canvas.height = document.body.clientHeight;
   backCanvas.width = document.body.clientWidth;

@@ -14,7 +14,7 @@ class AnimationSystem extends BaseSystem {
 		this.currentFrame++
 		if (this.currentFrame % 15 == 0) {
 			for (let i = 0; i < entities.length; i++) {
-				const entity = entities[i].components['Animator']
+				const entity = entities[i].components.Animator
 				if(!entity) continue
 				entity.currentFrame++
 				if (entity.currentFrame > entity.frames) entity.currentFrame = 1
