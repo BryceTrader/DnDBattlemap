@@ -11,14 +11,23 @@ class RenderSystem extends BaseSystem {
 		return true
 	}
 
-	update(entities) {
+	setCanvasSize(camera) {
+		this.canvas.width = camera.clientWidth
+		this.canvas.height = camera.clientHeight
 		this.context.imageSmoothingEnabled = false
+	}
+
+	update(entities) {
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
 		let camera
 
 		for (let i = 0; i < entities.length; i++) {
 			const entity = entities[i]
-			if (entity.components.Camera) camera = entity.components.Camera
+			if (entity.components.Camera) {
+				camera = entity.components.Camera
+				this.setCanvasSize(camera)
+				continue
+			}
 			if (!entity.components.Sprite) continue
 
 			// Onscreen check

@@ -1,6 +1,6 @@
 window.addEventListener('resize', () => {
-	const camera = GM.getCamera()
-	camera.resized = true
+	GM.systems[GM.systemsDictionary.BackgroundSystem].backgroundMoved = true
+	GM.systems[GM.systemsDictionary.CameraSystem].resized = true
 })
 
 window.addEventListener('mousedown', (e) => {
@@ -16,12 +16,12 @@ window.addEventListener('keydown', (key) => {
 	GM.systems[GM.systemsDictionary.InputSystem].keyInput.push(key.key)
 })
 
-function updateLoop() {
-	GM.update()
-	requestAnimationFrame(updateLoop)
+function updateLoop(manager) {
+	manager.update()
+	requestAnimationFrame(() => updateLoop(manager))
 }
 
-function setupCanvasSystemsManager() {
+function setupCanvasSystemsManager(GM) {
 	// Canvases
 	canvas.width = document.body.clientWidth
 	canvas.height = document.body.clientHeight
@@ -30,7 +30,7 @@ function setupCanvasSystemsManager() {
 
 	// Systems
 	const CameraSys = new CameraSystem()
-	const InputSys = new InputSystem()
+	const InputSys = new InputSystem(CONFIG.controls)
 	const ActionSys = new ActionSystem()
 	const AnimationSys = new AnimationSystem()
 	const RenderSys = new RenderSystem(ctx, canvas)
@@ -59,6 +59,16 @@ const backCanvas = document.getElementById('background')
 const bctx = backCanvas.getContext('2d')
 
 const GM = new Manager()
-setupCanvasSystemsManager()
+const CONFIG = {
+	controls: {
+		zoomIn: ']',
+		zoomOut: '[',
+		cameraLeft: 'a',
+		cameraRight: 'd',
+		cameraUp: 'w',
+		cameraDown: 's',
+	},
+}
+setupCanvasSystemsManager(GM)
 
-updateLoop()
+updateLoop(GM)

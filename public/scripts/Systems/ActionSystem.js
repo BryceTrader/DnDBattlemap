@@ -8,7 +8,8 @@ class ActionSystem extends BaseSystem {
 
 		const cX = Math.floor(click.clientX / camera.tileScaled) - camera.xOffset
 		const cY = Math.floor(click.clientY / camera.tileScaled) - camera.yOffset
-		if (!GM.checkSamePosition(cX, cY)) return
+		if (GM.getEntityByPosition(cX, cY)) return
+
 		const target = new Entity()
 		target.addComponent(new Position(cX, cY))
 		target.addComponent(new Sprite('orc'))
@@ -23,14 +24,8 @@ class ActionSystem extends BaseSystem {
 
 		const cX = Math.floor(click.clientX / camera.tileScaled) - camera.xOffset
 		const cY = Math.floor(click.clientY / camera.tileScaled) - camera.yOffset
-		for (let i = 0; i < GM.entities.length; i++) {
-			const entityPos = GM.entities[i].components.Position
-			if (!entityPos) continue
-			if (entityPos.x == cX && entityPos.y == cY) {
-				GM.removeEntity(GM.entities[i])
-				break
-			}
-		}
+
+		GM.removeEntity(GM.getEntityByPosition(cX, cY))
 	}
 
 	update() {}

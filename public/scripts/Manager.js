@@ -41,16 +41,28 @@ class Manager {
 		}
 	}
 
-	checkSamePosition(targetX, targetY) {
+	checkIfSamePosition(targetX, targetY) {
 		for (let i = 0; i < this.entities.length; i++) {
 			const entity = this.entities[i].components.Position
 			if (!entity) continue
 			if (entity.x != targetX) continue
-			if (entity.y == targetY) {
-				return false
+			if (entity.y === targetY) {
+				return true
 			}
 		}
-		return true
+		return false
+	}
+
+	getEntityByPosition(x, y) {
+		for (let i = 0; i < this.entities.length; i++) {
+			const entity = this.entities[i].components.Position
+			if (!entity) continue
+			if (entity.x != x) continue
+			if (entity.y === y) {
+				return entity
+			}
+		}
+		return null
 	}
 
 	getCamera() {

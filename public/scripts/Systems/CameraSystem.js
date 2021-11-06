@@ -2,33 +2,33 @@ class CameraSystem extends BaseSystem {
 	constructor() {
 		super('CameraSystem')
 		this.resized = false
-		const camera = new Entity()
-		camera.addComponent(new Camera())
-		GM.addEntity(camera)
+		const cameraEntity = new Entity()
+		this.camera = new Camera()
+		cameraEntity.addComponent(this.camera)
+		GM.addEntity(cameraEntity)
 	}
 
-	getWindowSize(camera) {
-		camera.clientWidth = document.body.clientWidth
-		camera.clientHeight = document.body.clientHeight
-		camera.width = Math.floor(camera.clientWidth / camera.tileScaled)
-		camera.height = Math.floor(camera.clientHeight / camera.tileScaled)
+	getWindowSize() {
+		this.camera.clientWidth = document.body.clientWidth
+		this.camera.clientHeight = document.body.clientHeight
+		this.camera.width = Math.floor(this.camera.clientWidth / this.camera.tileScaled)
+		this.camera.height = Math.floor(this.camera.clientHeight / this.camera.tileScaled)
 		this.resized = false
 	}
 
-	checkScaling(camera) {
-		if (camera.tileScaled < camera.zoomScale) {
-			camera.tileScaled = camera.zoomScale
-			camera.zoomLevel++
+	checkScaling() {
+		if (this.camera.tileScaled < this.camera.zoomScale) {
+			this.camera.tileScaled = this.camera.zoomScale
+			this.camera.zoomLevel++
 		}
 
-		if (camera.clientHeight < camera.tileScaled) {
-			camera.zoomLevel--
-			camera.tileScaled = camera.tileSize + camera.zoomScale * camera.zoomLevel
+		if (this.camera.clientHeight < this.camera.tileScaled) {
+			this.camera.zoomLevel--
+			this.camera.tileScaled = this.camera.tileSize + this.camera.zoomScale * this.camera.zoomLevel
 		}
 	}
 
-	update(entities) {
-		const camera = GM.getCamera()
-		if (this.resized) this.getWindowSize(camera)
+	update() {
+		if (this.resized) this.getWindowSize()
 	}
 }

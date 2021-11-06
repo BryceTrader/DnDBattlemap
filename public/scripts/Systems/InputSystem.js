@@ -1,15 +1,8 @@
 class InputSystem extends BaseSystem {
-	constructor() {
+	constructor(controls) {
 		super('InputSystem')
 		this.keyInput = []
-		this.controls = {
-			zoomIn: ']',
-			zoomOut: '[',
-			cameraLeft: 'a',
-			cameraRight: 'd',
-			cameraUp: 'w',
-			cameraDown: 's',
-		}
+		this.controls = controls
 	}
 
 	mouseClickHandler(click) {

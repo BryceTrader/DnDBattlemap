@@ -7,9 +7,15 @@ class BackgroundSystem extends BaseSystem {
 		this.shouldDrawGrid = true
 	}
 
+	setCanvasSize(camera) {
+		this.canvas.width = camera.clientWidth
+		this.canvas.height = camera.clientHeight
+		this.context.imageSmoothingEnabled = false
+	}
+
 	drawBackground(camera) {
 		GM.systems[GM.systemsDictionary.CameraSystem].checkScaling(camera)
-		this.context.imageSmoothingEnabled = false
+		this.setCanvasSize(camera)
 		this.context.clearRect(0, 0, camera.clientWidth, camera.clientHeight)
 		this.context.beginPath()
 		// this.context.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
