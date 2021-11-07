@@ -1,33 +1,24 @@
 class BackgroundSystem extends BaseSystem {
-	constructor(ctx, canvas) {
+	constructor(ctx, canvas, camera) {
 		super('BackgroundSystem')
 		this.context = ctx
 		this.canvas = canvas
-		this.backgroundMoved = true
+		this.camera = camera
 		this.shouldDrawGrid = true
 	}
 
-	setCanvasSize(camera) {
-		this.canvas.width = camera.clientWidth
-		this.canvas.height = camera.clientHeight
-		this.context.imageSmoothingEnabled = false
-	}
-
-	drawBackground(camera) {
-		GM.systems[GM.systemsDictionary.CameraSystem].checkScaling(camera)
-		this.setCanvasSize(camera)
-		this.context.clearRect(0, 0, camera.clientWidth, camera.clientHeight)
+	drawBackground() {
+		this.context.clearRect(0, 0, this.camera.clientWidth, this.camera.clientHeight)
 		this.context.beginPath()
 		// this.context.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
 		this.context.closePath()
-		if (this.shouldDrawGrid) this.drawGrid(camera)
-		this.backgroundMoved = false
+		if (this.shouldDrawGrid) this.drawGrid()
 	}
 
-	drawGrid(camera) {
-		const width = camera.clientWidth
-		const height = camera.clientHeight
-		const offset = camera.tileScaled
+	drawGrid() {
+		const width = this.camera.clientWidth
+		const height = this.camera.clientHeight
+		const offset = this.camera.tileScaled
 		for (let i = 0; i <= width; i += offset) {
 			this.context.beginPath()
 			this.context.moveTo(i, 0)
@@ -41,7 +32,6 @@ class BackgroundSystem extends BaseSystem {
 	}
 
 	update() {
-		if (!this.backgroundMoved) return
-		this.drawBackground(GM.getCamera())
+		this.drawBackground(this.camera)
 	}
 }

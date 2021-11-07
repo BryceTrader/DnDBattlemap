@@ -13,6 +13,12 @@ class Manager {
 		}
 	}
 
+	removeEntityByPosition(x, y) {
+		const entity = this.getEntityByPosition(x, y)
+		if (!entity) return
+		this.removeEntity(entity)
+	}
+
 	removeEntity(entityToBeRemoved) {
 		for (let i = 0; i < this.entities.length; i++) {
 			if (this.entities[i].id === entityToBeRemoved.id) {
@@ -63,12 +69,6 @@ class Manager {
 			}
 		}
 		return null
-	}
-
-	getCamera() {
-		for (let i = 0; i < this.entities.length; i++) {
-			if (this.entities[i].components.Camera) return this.entities[i].components.Camera
-		}
 	}
 
 	update() {

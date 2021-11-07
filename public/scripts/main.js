@@ -1,40 +1,52 @@
-window.addEventListener('resize', () => {
-	GM.systems[GM.systemsDictionary.BackgroundSystem].backgroundMoved = true
-	GM.systems[GM.systemsDictionary.CameraSystem].resized = true
-})
-
-window.addEventListener('mousedown', (e) => {
-	e.preventDefault()
-	GM.systems[GM.systemsDictionary.InputSystem].mouseClickHandler(e)
-})
-
-window.addEventListener('contextmenu', (e) => {
-	e.preventDefault()
-})
-
-window.addEventListener('keydown', (key) => {
-	GM.systems[GM.systemsDictionary.InputSystem].keyInput.push(key.key)
-})
+class Camera {
+	constructor() {
+		this.xOffset = 0
+		this.yOffset = 0
+		this.zoomScale = 32
+		this.zoomLevel = 0
+		this.tileSize = 256
+		this.tileScaled = this.tileSize + this.zoomScale * this.zoomLevel
+		this.clientWidth = document.body.clientWidth
+		this.clientHeight = document.body.clientHeight
+		this.width = Math.floor(this.clientWidth / this.tileScaled)
+		this.height = Math.floor(this.clientHeight / this.tileScaled)
+	}
+}
 
 function updateLoop(manager) {
 	manager.update()
 	requestAnimationFrame(() => updateLoop(manager))
 }
 
-function setupCanvasSystemsManager(GM) {
+function setupCanvasSystemsManager(manager) {
 	// Canvases
 	canvas.width = document.body.clientWidth
 	canvas.height = document.body.clientHeight
 	backCanvas.width = document.body.clientWidth
 	backCanvas.height = document.body.clientHeight
 
+	window.addEventListener('resize', () => {
+		canvas.width = document.body.clientWidth
+		canvas.height = document.body.clientHeight
+		backCanvas.width = document.body.clientWidth
+		backCanvas.height = document.body.clientHeight
+		USER.resized = true
+	})
+
 	// Systems
-	const CameraSys = new CameraSystem()
-	const InputSys = new InputSystem(CONFIG.controls)
-	const ActionSys = new ActionSystem()
+	const CAMERA = new Camera()
+	const CameraSys = new CameraSystem(CAMERA, USER)
+	const InputSys = new InputSystem(USER.input, window)
+	const ActionSys = new ActionSystem(
+		CONFIG.controls,
+		USER.input,
+		CAMERA,
+		(entity) => manager.addEntity(entity),
+		(entity) => manager.removeEntityByPosition(entity)
+	)
 	const AnimationSys = new AnimationSystem()
-	const RenderSys = new RenderSystem(ctx, canvas)
-	const BackgroundSys = new BackgroundSystem(bctx, backCanvas)
+	const RenderSys = new RenderSystem(ctx, canvas, CAMERA)
+	const BackgroundSys = new BackgroundSystem(bctx, backCanvas, CAMERA)
 	// const NetworkSys = new NetworkSystem()
 
 	// Socket.io
@@ -43,13 +55,13 @@ function setupCanvasSystemsManager(GM) {
 	})
 
 	// ManagerSystems
-	GM.addSystem(CameraSys)
-	GM.addSystem(InputSys)
-	GM.addSystem(ActionSys)
-	GM.addSystem(AnimationSys)
-	GM.addSystem(RenderSys)
-	GM.addSystem(BackgroundSys)
-	// GM.addSystem(NetworkSys)
+	manager.addSystem(CameraSys)
+	manager.addSystem(InputSys)
+	manager.addSystem(ActionSys)
+	manager.addSystem(AnimationSys)
+	manager.addSystem(RenderSys)
+	manager.addSystem(BackgroundSys)
+	// manager.addSystem(NetworkSys)
 }
 
 const socket = io()
@@ -58,7 +70,7 @@ const ctx = canvas.getContext('2d')
 const backCanvas = document.getElementById('background')
 const bctx = backCanvas.getContext('2d')
 
-const GM = new Manager()
+const GameManager = new Manager()
 const CONFIG = {
 	controls: {
 		zoomIn: ']',
@@ -69,6 +81,10 @@ const CONFIG = {
 		cameraDown: 's',
 	},
 }
-setupCanvasSystemsManager(GM)
+const USER = {
+	input: [],
+	resized: true,
+}
+setupCanvasSystemsManager(GameManager)
 
-updateLoop(GM)
+updateLoop(GameManager)

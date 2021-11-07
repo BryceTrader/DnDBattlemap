@@ -1,58 +1,25 @@
 class InputSystem extends BaseSystem {
-	constructor(controls) {
+	constructor(input, window) {
 		super('InputSystem')
-		this.keyInput = []
-		this.controls = controls
+		this.input = input
+
+		this.#setup(window)
 	}
 
-	mouseClickHandler(click) {
-		const AS = GM.systems[GM.systemsDictionary.ActionSystem]
-		switch (click.button) {
-			case 0:
-				AS.addEntityToManager(click)
-				break
-			case 1:
-				console.log('Middle mouse button clicked.')
-				break
-			case 2:
-				AS.removeEntityFromManager(click)
-				break
-		}
+	#setup(window) {
+		window.addEventListener('mousedown', (e) => {
+			e.preventDefault()
+			this.input.push(e)
+		})
+
+		window.addEventListener('contextmenu', (e) => {
+			e.preventDefault()
+		})
+
+		window.addEventListener('keydown', (key) => {
+			this.input.push(key.key)
+		})
 	}
 
-	inputHandler(key) {
-		const camera = GM.getCamera()
-
-		switch (key) {
-			case this.controls.zoomOut:
-				camera.zoomLevel--
-				camera.tileScaled = camera.tileSize + camera.zoomScale * camera.zoomLevel
-				break
-			case this.controls.zoomIn:
-				camera.zoomLevel++
-				camera.tileScaled = camera.tileSize + camera.zoomScale * camera.zoomLevel
-				break
-			case this.controls.cameraDown:
-				camera.yOffset--
-				break
-			case this.controls.cameraUp:
-				camera.yOffset++
-				break
-			case this.controls.cameraLeft:
-				camera.xOffset++
-				break
-			case this.controls.cameraRight:
-				camera.xOffset--
-				break
-		}
-		GM.systems[GM.systemsDictionary.BackgroundSystem].backgroundMoved = true
-	}
-
-	update() {
-		for (let i = 0; i < this.keyInput.length; i++) {
-			const value = this.keyInput[i]
-			this.inputHandler(value)
-		}
-		this.keyInput = []
-	}
+	update() {}
 }

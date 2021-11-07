@@ -30,21 +30,6 @@ class Animator extends BaseComponent {
 		this.spriteSize = 0
 		this.frames = 0
 		this.currentFrame = 1
-	}
-}
-
-class Camera extends BaseComponent {
-	constructor() {
-		super('Camera')
-		this.xOffset = 0
-		this.yOffset = 0
-		this.zoomScale = 32
-		this.zoomLevel = 0
-		this.tileSize = 256
-		this.tileScaled = this.tileSize + this.zoomScale * this.zoomLevel
-		this.clientWidth = document.body.clientWidth
-		this.clientHeight = document.body.clientHeight
-		this.width = Math.floor(this.clientWidth / this.tileScaled)
-		this.height = Math.floor(this.clientHeight / this.tileScaled)
+		this.built = false
 	}
 }

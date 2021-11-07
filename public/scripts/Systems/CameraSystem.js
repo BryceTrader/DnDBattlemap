@@ -1,19 +1,8 @@
 class CameraSystem extends BaseSystem {
-	constructor() {
+	constructor(camera, USER) {
 		super('CameraSystem')
-		this.resized = false
-		const cameraEntity = new Entity()
-		this.camera = new Camera()
-		cameraEntity.addComponent(this.camera)
-		GM.addEntity(cameraEntity)
-	}
-
-	getWindowSize() {
-		this.camera.clientWidth = document.body.clientWidth
-		this.camera.clientHeight = document.body.clientHeight
-		this.camera.width = Math.floor(this.camera.clientWidth / this.camera.tileScaled)
-		this.camera.height = Math.floor(this.camera.clientHeight / this.camera.tileScaled)
-		this.resized = false
+		this.camera = camera
+		this.USER = USER
 	}
 
 	checkScaling() {
@@ -28,7 +17,16 @@ class CameraSystem extends BaseSystem {
 		}
 	}
 
+	resizeCamera() {
+		this.camera.tileScaled = this.camera.tileSize + this.camera.zoomScale * this.camera.zoomLevel
+		this.camera.clientWidth = document.body.clientWidth
+		this.camera.clientHeight = document.body.clientHeight
+		this.camera.width = Math.floor(this.camera.clientWidth / this.camera.tileScaled)
+		this.camera.height = Math.floor(this.camera.clientHeight / this.camera.tileScaled)
+	}
+
 	update() {
-		if (this.resized) this.getWindowSize()
+		if (this.USER.resized) this.resizeCamera()
+		this.USER.resized = false
 	}
 }
