@@ -15,8 +15,4 @@ class Entity {
 	removeComponent(component) {
 		delete this.components[component.name]
 	}
-
-	print() {
-		console.log(this.components)
-	}
 }

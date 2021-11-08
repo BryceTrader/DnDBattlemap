@@ -2,7 +2,7 @@ class AnimationSystem extends BaseSystem {
 	constructor() {
 		super('AnimationSystem')
 		this.animationJSON = {}
-		this.currentFrame = 0
+		this.frameCount = 0
 	}
 
 	getFrameData(animator) {
@@ -12,15 +12,15 @@ class AnimationSystem extends BaseSystem {
 	}
 
 	update(entities) {
-		this.currentFrame++
-		if (this.currentFrame % 15 == 0) {
-			for (let i = 0; i < entities.length; i++) {
-				const entity = entities[i].components.Animator
-				if (!entity.built) this.getFrameData(entity)
+		this.frameCount++
+		for (let i = 0; i < entities.length; i++) {
+			const entity = entities[i].components.Animator
+			if (!entity.built) this.getFrameData(entity)
+			if (this.frameCount % 15 == 0) {
 				entity.currentFrame++
 				if (entity.currentFrame > entity.frames) entity.currentFrame = 1
 				entity.spriteSheetX = entity.spriteSize * (entity.currentFrame - 1)
-				this.currentFrame = 0
+				this.frameCount = 0
 			}
 		}
 	}
