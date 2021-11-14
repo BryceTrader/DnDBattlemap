@@ -26,7 +26,7 @@ class CameraSystem extends BaseSystem {
 	}
 
 	update() {
-		if (this.USER.resized) this.resizeCamera()
-		this.USER.resized = false
+		if (this.USER.bool) this.resizeCamera()
+		this.USER.bool = false
 	}
 }

@@ -30,19 +30,20 @@ function setupCanvasSystemsManager(manager) {
 		canvas.height = document.body.clientHeight
 		backCanvas.width = document.body.clientWidth
 		backCanvas.height = document.body.clientHeight
-		USER.resized = true
+		USER.resized.bool = true
 	})
 
 	// Systems
 	const CAMERA = new Camera()
-	const CameraSys = new CameraSystem(CAMERA, USER)
+	const CameraSys = new CameraSystem(CAMERA, USER.resized)
 	const InputSys = new InputSystem(USER.input, window)
 	const ActionSys = new ActionSystem(
 		CONFIG.controls,
 		USER.input,
 		CAMERA,
 		(entity) => manager.addEntity(entity),
-		(entity) => manager.removeEntityByPosition(entity)
+		(entity) => manager.removeEntityByPosition(entity),
+		(x, y) => manager.getEntityByPosition(x, y)
 	)
 	const AnimationSys = new AnimationSystem()
 	const RenderSys = new RenderSystem(ctx, canvas, CAMERA)
@@ -83,7 +84,9 @@ const CONFIG = {
 }
 const USER = {
 	input: [],
-	resized: true,
+	resized: {
+		bool: true,
+	},
 }
 setupCanvasSystemsManager(GameManager)
 

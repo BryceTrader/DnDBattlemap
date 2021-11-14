@@ -1,21 +1,24 @@
 class ActionSystem extends BaseSystem {
-	constructor(controls, input, camera, funcAddEntity, funcRemoveEntityByPosition) {
+	// TODO Figure out what to do with these imported functions.  Whether move into a class of their own or moved into this class itself.
+	constructor(controls, input, camera, funcAddEntity, funcRemoveEntityByPosition, funcGetEntityByPosition) {
 		super('ActionSystem')
 		this.controls = controls
 		this.input = input
 		this.camera = camera
 		this.funcAddEntity = funcAddEntity
 		this.funcRemoveEntityByPosition = funcRemoveEntityByPosition
+		this.funcGetEntityByPosition = funcGetEntityByPosition
 	}
 
+	// new Sprite is case sensitive on Linux.  Unsure why
 	addEntityToManager(click) {
 		const cX = Math.floor(click.clientX / this.camera.tileScaled) - this.camera.xOffset
 		const cY = Math.floor(click.clientY / this.camera.tileScaled) - this.camera.yOffset
-		// if (this.GM.getEntityByPosition(cX, cY)) return
+		if (this.funcGetEntityByPosition(cX, cY)) return
 
 		const target = new Entity()
 		target.addComponent(new Position(cX, cY))
-		target.addComponent(new Sprite('orc'))
+		target.addComponent(new Sprite('Orc'))
 		target.addComponent(new Animator(target.components.Sprite.spriteName))
 		this.funcAddEntity(target)
 	}
